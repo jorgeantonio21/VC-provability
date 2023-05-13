@@ -21,17 +21,21 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
 
     mapping(address => uint256) public addressToId;
     mapping(uint256 => address) public idToAddress;
-    mapping(uint256 => ETHGlobalAttendeeResponse)
-        public ETHGlobalAttendeeSurvey;
+    mapping(address => ETHGlobalAttendeeResponse)
+        public ethGlobalAttendeeSurvey;
 
-    uint64[] public responseUserIds;
+    uint64 public count;
+    mapping(uint64 => ETHGlobalAttendeeResponse)
+        public ethGlobalAttendeeResponses;
 
     uint256 public TOKEN_AMOUNT_FOR_AIRDROP_PER_ID = 5 * 10 ** uint(decimals());
 
     constructor(
         string memory _name,
         string memory _symbol
-    ) ERC20(_name, _symbol) {}
+    ) ERC20(_name, _symbol) {
+        count = 0;
+    }
 
     function _beforeProofSubmit(
         uint64,
@@ -81,5 +85,9 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
     function submitSurveyAttendee(
         address attendeeAddress,
         ETHGlobalAttendeeResponse response
-    ) internal override {}
+    ) internal override {
+        ethGlobalAttendeeSurvey[address] = response;
+        ethGlobalAttendeeResponses[count] = response;
+        count += 1;
+    }
 }
