@@ -23,6 +23,7 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
     mapping(uint256 => address) public idToAddress;
     mapping(address => ETHGlobalAttendeeResponse)
         public ethGlobalAttendeeSurvey;
+    mapping(address => uint16) public voteCounts;
 
     uint64 public count;
     mapping(uint64 => ETHGlobalAttendeeResponse)
@@ -80,14 +81,31 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
             proofs[to][TRANSFER_REQUEST_ID] == true,
             "only identities who provided proof are allowed to receive tokens"
         );
+        require(
+            voteCounts[to] > 0,
+            "user must have submitted a survey response"
+        );
     }
 
     function submitSurveyAttendee(
         address attendeeAddress,
         ETHGlobalAttendeeResponse response
-    ) internal override {
-        ethGlobalAttendeeSurvey[address] = response;
+    ) internal {
+        require(
+            proofs[attendeeAddress][TRANSFER_REQUEST_ID] == true,
+            "only identities who provided proof are allowed to vote"
+        );
+        require(
+            voteCounts[attendeeAddress] == 0,
+            "identities cannot double vote"
+        );
+        ethGlobalAttendeeSurvey[attendeeAddress] = response;
         ethGlobalAttendeeResponses[count] = response;
+        voteCounts[attendeeAddress] = 1;
         count += 1;
+    }
+
+    function getCount() external view returns (uint64) {
+        return count;
     }
 }
