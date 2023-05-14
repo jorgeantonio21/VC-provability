@@ -1,22 +1,21 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  let name = "ETHGlobalLisbonSurvey";
-  const symbol = "ETHGLO-LIS";
-
-  const ETHGlobalPOAPContract = await ethers.getContractFactory("ETHGlobalPOAPContract");
-  const ethGlobalPOAPContract = await ETHGlobalPOAPContract.deploy(name, symbol);
-
-  await ethGlobalPOAPContract.deployed();
-
-  console.log(
-    `ETHGlobalPOAPContract contract successfully deployed to ${ethGlobalPOAPContract.address}`
+  const verifierContract = "ETHGlobalPOAPContract";
+  const verifierName = "ETHGlobalLisbonSurvey";
+  const verifierSymbol = "ETHGLO-LIS";
+  const ERC20Verifier = await ethers.getContractFactory(verifierContract);
+  const erc20Verifier = await ERC20Verifier.deploy(
+    verifierName,
+    verifierSymbol
   );
-}
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+  await erc20Verifier.deployed();
+  console.log(verifierName, " tx hash:", erc20Verifier.address);
+}
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
