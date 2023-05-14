@@ -6,3 +6,7 @@ credentials, issued by a suitable issuer node. The required QR code should be su
 The main smart contract implements logic for credential on-chain verification, submission of a survey concerning the event, and 
 then mints a pre-defined ERC20 tokens to the users wallet. The tokens can then be used for future hackathon attendances, as well
 as to share with collaborators and friends. 
+
+The Polygon Mumbai deployed smart contract can be found at 
+
+https://mumbai.polygonscan.com/address/0xBF26bf8857b4C9156404565B4b016817B91B3aA9
