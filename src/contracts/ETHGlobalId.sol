@@ -17,7 +17,7 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
         AWESOME
     }
 
-    uint64 public TRANSFER_REQUEST_ID = 1;
+    uint64 public SURVEY_REQUEST_ID = 1;
 
     mapping(address => uint256) public addressToId;
     mapping(uint256 => address) public idToAddress;
@@ -59,7 +59,7 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
         ICircuitValidator validator
     ) internal override {
         require(
-            requestId == TRANSFER_REQUEST_ID && addressToId[_msgSender()] == 0,
+            requestId == SURVEY_REQUEST_ID && addressToId[_msgSender()] == 0,
             "proof can not be submitted more than once"
         );
 
@@ -78,7 +78,7 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
         uint256
     ) internal view override {
         require(
-            proofs[to][TRANSFER_REQUEST_ID] == true,
+            proofs[to][SURVEY_REQUEST_ID] == true,
             "only identities who provided proof are allowed to receive tokens"
         );
         require(
@@ -92,7 +92,7 @@ contract ETHGlobalPOAPContract is ERC20, ZKPVerifier {
         ETHGlobalAttendeeResponse response
     ) internal {
         require(
-            proofs[attendeeAddress][TRANSFER_REQUEST_ID] == true,
+            proofs[attendeeAddress][SURVEY_REQUEST_ID] == true,
             "only identities who provided proof are allowed to vote"
         );
         require(
